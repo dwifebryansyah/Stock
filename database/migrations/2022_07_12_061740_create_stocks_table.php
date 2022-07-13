@@ -21,6 +21,7 @@ class CreateStocksTable extends Migration
             $table->enum('type', ['0', '1']);
             $table->integer('harga');
             $table->integer('jumlah');
+            $table->integer('stock');
             $table->integer('admin_id')->unsigned();
             $table->foreign('barang_id')->references('id')->on('barangs')->onDelete('cascade');
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');

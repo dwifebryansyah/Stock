@@ -16,6 +16,7 @@ class Stock extends Model
         'type',
         'harga',
         'jumlah',
+        'stock',
         'admin_id',
         'created_at',
         'updated_at'

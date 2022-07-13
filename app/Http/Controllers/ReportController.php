@@ -23,17 +23,24 @@ class ReportController extends Controller
     public function index()
     {
         if($_GET){
-            $harga = DB::table('stocks')
-                ->where('date','>=',$_GET['mulai'])
-                ->where('date','<=',$_GET['akhir'])
-                ->sum(\DB::raw('jumlah * harga'));
+            $dataStock = DB::table('stocks')
+                        ->where('date','>=',$_GET['mulai'])
+                        ->where('date','<=',$_GET['akhir'])
+                        ->where('barang_id','<=',$_GET['barang'])
+                        ->orderBy('id','desc')
+                        ->first();
+            if($dataStock!= null){
+                $harga = $dataStock->harga * $dataStock->stock;
+            }else{
+                $harga = 0;
+            }
         }else{
             $harga = DB::table('stocks')
                 ->sum(\DB::raw('jumlah * harga'));
         }
         
-        // dd($harga);
-        return view('report.index',['total'=>$harga]);
+        $dataBarang = Barang::get();
+        return view('report.index',['total'=>$harga , 'dataBarang' => $dataBarang]);
     }
 
     public function table(Request $request)
@@ -41,6 +48,7 @@ class ReportController extends Controller
         if($request['mulai'] != null && $request['akhir'] != null){
             $data = Stock::where('date','>=',$request['mulai'])
                     ->where('date','<=',$request['akhir'])
+                    ->where('barang_id',$request['barang'])
                     ->orderBy('id','desc')->get();
         }else{
             $data = Stock::orderBy('id','desc')->get();
@@ -68,14 +76,17 @@ class ReportController extends Controller
             $barang = Barang::where('id',$data->barang_id)->first();
             return "Rp.".number_format($barang->harga, 0, ',', '.');
         })
-        ->editColumn('stock', function($data){
+        ->editColumn('jumlah', function($data){
             return $data->jumlah;
+        })
+        ->editColumn('stock', function($data){
+            return $data->stock;
         })
         ->rawColumns(['nama_barang','type']) ->addIndexColumn()->toJson();
     }
 
-    public function excel($mulai, $akhir)
+    public function excel($mulai, $akhir, $barang)
     {
-        return Excel::download(new LaporanExport($mulai,$akhir), 'Laporan.xlsx');
+        return Excel::download(new LaporanExport($mulai,$akhir,$barang), 'Laporan.xlsx');
     }
 }

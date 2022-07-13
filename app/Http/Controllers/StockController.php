@@ -61,6 +61,7 @@ class StockController extends Controller
             'type' => $type,
             'harga' => $price,
             'jumlah' => $request->jumlah,
+            'stock' => $stok,
             'admin_id' => $admin,
             'created_at' => now()
         ]);
@@ -112,6 +113,7 @@ class StockController extends Controller
                     'date' => $request->date,
                     'type' => $type,
                     'harga' => $price,
+                    'stock' => $totalStock,
                     'admin_id' => $admin,
                 ]);
     
@@ -147,6 +149,7 @@ class StockController extends Controller
                     'date' => $request->date,
                     'type' => $type,
                     'harga' => $price,
+                    'stock' => $stockSum,
                     'admin_id' => $admin,
                 ]);
 
@@ -181,6 +184,7 @@ class StockController extends Controller
                     'barang_id' => $request->barang,
                     'date' => $request->date,
                     'type' => $type,
+                    'stock' => $totalStock,
                     'harga' => $price,
                     'admin_id' => $admin,
                 ]);
@@ -218,6 +222,7 @@ class StockController extends Controller
                     'date' => $request->date,
                     'type' => $type,
                     'harga' => $price,
+                    'stock' => $stockSum,
                     'admin_id' => $admin,
                 ]);
 
@@ -289,8 +294,11 @@ class StockController extends Controller
             $barang = Barang::where('id',$data->barang_id)->first();
             return "Rp.".number_format($barang->harga, 0, ',', '.');
         })
-        ->editColumn('stock', function($data){
+        ->editColumn('jumlah', function($data){
             return $data->jumlah;
+        })
+        ->editColumn('stock', function($data){
+            return $data->stock;
         })
         ->addColumn('action', function($data){
             $hapus = "Apakah kamu yakin menghapus ini ?";

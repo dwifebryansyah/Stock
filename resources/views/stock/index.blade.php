@@ -87,6 +87,7 @@
                 <th>Jenis</th>
                 <th>Harga</th>
                 <th>Jumlah</th>
+                <th>Total Stok</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -154,6 +155,12 @@
                     {
                         data: 'harga',
                         name: 'harga',
+                        orderable: false,
+                        searchable: true
+                    },
+                    {
+                        data: 'jumlah',
+                        name: 'jumlah',
                         orderable: false,
                         searchable: true
                     },

@@ -13,9 +13,10 @@ class LaporanExport implements FromCollection , WithHeadings
     protected $mulai;
     protected $akhir;
 
-    function __construct($mulai,$akhir) {
+    function __construct($mulai,$akhir,$barang) {
             $this->mulai = $mulai;
             $this->akhir = $akhir;
+            $this->barang = $barang;
     }
 
     /**
@@ -26,6 +27,7 @@ class LaporanExport implements FromCollection , WithHeadings
         if($this->mulai != 'null' && $this->akhir != 'null'){
             $data = Stock::where('date','>=',$this->mulai)
                     ->where('date','<=',$this->akhir)
+                    ->where('barang_id',$this->barang)
                     ->orderBy('id','desc')->get();
         }else{
             $data = Stock::orderBy('id','desc')->get();
@@ -48,7 +50,8 @@ class LaporanExport implements FromCollection , WithHeadings
                 'Jenis' => $type,
                 'Harga' => $collect->harga,
                 'Jumlah' => $collect->jumlah,
-                'Total' => $total
+                'Total' => $total,
+                'SisaStock' => $collect->stock
             ];
         });
 
@@ -64,7 +67,8 @@ class LaporanExport implements FromCollection , WithHeadings
             "Jenis",
             "Harga",
             "Jumlah",
-            "Total"
+            "Total",
+            "SisaStock"
         ];
     }
 }

@@ -41,6 +41,6 @@ Route::name('stok.')->group(function () {
 Route::name('laporan.')->group(function () {
     Route::get('/laporan', 'ReportController@index')->name('index');
     Route::get('/tableLaporan', 'ReportController@table')->name('table');
-    Route::get('/exportExcel/{mulai}/{akhir}', 'ReportController@excel')->name('excel');
+    Route::get('/exportExcel/{mulai}/{akhir}/{barang_id}', 'ReportController@excel')->name('excel');
 });
 
