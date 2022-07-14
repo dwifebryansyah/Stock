@@ -42,12 +42,13 @@ class BarangController extends Controller
     public function update(Request $request)
     {
         $name = Barang::where('id',$request->id)->first();
+        $price = str_replace(".", "", $request->harga);
         if($name != null){
             if($name->nama_barang == $request->name){
                 $admin = Auth::id();    
                 $insert = Barang::where('id',$request->id)->update([
                     'nama_barang' => $request->name,
-                    'harga' => $request->harga,
+                    'harga' => $price,
                     'stock' => $request->stock,
                     'admin_id' => $admin,
                     'updated_at' => now()
@@ -62,8 +63,7 @@ class BarangController extends Controller
         $admin = Auth::id();    
         $insert = Barang::where('id',$request->id)->update([
             'nama_barang' => $request->name,
-            'harga' => $request->harga,
-            'stock' => $request->stock,
+            'harga' => $price,
             'admin_id' => $admin,
             'updated_at' => now()
         ]);

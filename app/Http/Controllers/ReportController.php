@@ -51,7 +51,20 @@ class ReportController extends Controller
                     ->where('barang_id',$request['barang'])
                     ->orderBy('id','desc')->get();
         }else{
-            $data = Stock::orderBy('id','desc')->get();
+            $data = DB::table('stocks')
+                    ->select('barang_id')
+                    ->distinct()
+                    ->get();
+            foreach($data as $key => $value){
+                $dataStock = Stock::where('barang_id',$value->barang_id)->orderBy('id','desc')->first();
+                $data[$key]->kode_trx = $dataStock->kode_trx;
+                $data[$key]->date = $dataStock->date;
+                $data[$key]->id = $dataStock->id;
+                $data[$key]->type = $dataStock->type;
+                $data[$key]->harga = $dataStock->harga;
+                $data[$key]->jumlah = $dataStock->jumlah;
+                $data[$key]->stock = $dataStock->stock;
+            }
         }
 
         return datatables($data)
