@@ -291,8 +291,7 @@ class StockController extends Controller
             }
         })
         ->editColumn('harga', function($data){
-            $barang = Barang::where('id',$data->barang_id)->first();
-            return "Rp.".number_format($barang->harga, 0, ',', '.');
+            return "Rp.".number_format($data->harga, 0, ',', '.');
         })
         ->editColumn('jumlah', function($data){
             return $data->jumlah;
